@@ -1,118 +1,146 @@
-import type { Metadata } from 'next';
-
-import { MDXContent } from '@content-collections/mdx/react';
-
-import { notFound } from 'next/navigation';
 import { project } from '@/app/source';
-
-import Header from './header';
-import Image from 'next/image';
-
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import { createMetadata } from '@/lib/metadata';
 import { metadata as meta } from '@/app/config';
-import { Heading, headingTypes, MDXLink } from '@/lib/mdx/default-components';
-import { cn } from '@/lib/utils';
+import type { Article, WithContext } from 'schema-dts';
+import React from 'react';
 
-import { HTMLAttributes } from 'react';
-
-export async function generateStaticParams({
-  params
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
-  // @ts-ignore
-  return project.generateParams([slug]);
+interface ProjectPageProps {
+  params: {
+    slug: string;
+  };
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const { slug } = params;
-  const page = project.getPage([slug]);
-  if (!page) notFound();
+interface ProjectData {
+  content: string;
+  title: string;
+  website?: string;
+  github?: string;
+  date?: string | Date;
+  tags?: { label: string }[];
+  description?: string;
+  icon?: string;
+  full?: boolean;
+  _openapi?: Record<string, unknown>;
+}
+
+export async function generateStaticParams() {
+  const projects = project.getPages();
+
+  return projects.map((project) => ({
+    slug: project.slugs[0] || ''
+  }));
+}
+
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+  const page = project.getPage([params.slug]);
+
+  if (!page) {
+    return createMetadata({
+      title: 'Project Not Found',
+      description: 'The requested project could not be found.'
+    });
+  }
+
+  const publishDate = page.data.date
+    ? new Date(page.data.date).toISOString()
+    : undefined;
 
   return createMetadata({
     title: page.data.title,
     description: page.data.description,
     openGraph: {
+      title: page.data.title,
+      description: page.data.description,
+      url: `/projects/${params.slug}`,
       type: 'article',
-      images: [
-        {
-          alt: 'banner',
-          width: 1200,
-          height: 630,
-          url: `/images/projects/${slug}/cover.jpg`,
-          type: 'image/png'
-        }
-      ],
-      authors: meta.author.name
-      // modifiedTime: page.data.date.toISOString()
+      publishedTime: publishDate,
+      modifiedTime: publishDate,
+      images: [{
+        url: `/images/projects/${params.slug}/cover.jpg`,
+        width: 1200,
+        height: 630,
+        alt: page.data.title
+      }]
     },
     twitter: {
-      images: [
-        {
-          alt: 'banner',
-          width: 1200,
-          height: 630,
-          url: `/images/projects/${slug}/cover.jpg`
-        }
-      ]
+      title: page.data.title,
+      description: page.data.description,
+      card: 'summary_large_image',
+      images: [`/images/projects/${params.slug}/cover.jpg`]
     }
-  }) satisfies Metadata;
+  });
 }
 
-export default async function ProjectPage({
-  params
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
-  const page = project.getPage([slug]);
-  if (!page) notFound();
+export default function ProjectPage({ params }: ProjectPageProps): React.ReactElement {
+  const page = project.getPage([params.slug]);
 
-  const {
-    data: { toc, body, structuredData }
-  } = page;
+  if (!page) {
+    notFound();
+  }
+
+  const formattedDate = page.data.date
+    ? new Date(page.data.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+    : null;
+
+  const publishDate = page.data.date
+    ? new Date(page.data.date).toISOString()
+    : undefined;
+
+  const jsonLd: WithContext<Article> = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: page.data.title,
+    description: page.data.description || '',
+    datePublished: publishDate,
+    dateModified: publishDate,
+    url: `${meta.site.url}/projects/${params.slug}`,
+    image: `/images/projects/${params.slug}/cover.jpg`,
+    author: {
+      '@type': 'Person',
+      name: meta.author.name
+    }
+  };
 
   return (
-    <main className="my-14 flex-1">
-      <div className="container mx-auto">
-        <Header metadata={page.data} />
-        <Image
-          src={`/images/projects/${slug}/cover.jpg`}
-          width={1280}
-          height={832}
-          alt={`Image of ${page.data.title}`}
-          className="my-12 aspect-video h-auto w-full rounded-lg object-cover"
-        />
-        <div className="prose min-w-full dark:prose-invert">
-          <MDXContent
-            code={body}
-            components={{
-              a: MDXLink,
-              img: (props) => <img className="rounded-xl" {...props} />,
-              ...Object.fromEntries(
-                headingTypes.map((type) => [
-                  type,
-                  (props: HTMLAttributes<HTMLHeadingElement>) => (
-                    <Heading as={type} {...props} />
-                  )
-                ])
-              ),
-              pre: ({ className, style: _style, ...props }) => (
-                <pre
-                  className={cn(
-                    'max-h-[500px] overflow-auto rounded-lg border border-neutral-800 bg-neutral-900 p-2 text-sm',
-                    className
-                  )}
-                  {...props}
+    <main className="flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article className="prose mx-auto max-w-4xl dark:prose-invert">
+        <div className="space-y-4 py-6">
+          <h1 className="text-4xl font-bold">{page.data.title}</h1>
+          {page.data.description && (
+            <p className="text-xl text-muted-foreground">
+              {page.data.description}
+            </p>
+          )}
+          {formattedDate && (
+            <time className="text-sm text-muted-foreground">
+              {formattedDate}
+            </time>
+          )}
+          {page.data.tags && page.data.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {page.data.tags.map((tag, index) => (
+                <span
+                  key={`tag_${index}`}
+                  className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
                 >
-                  {props.children}
-                </pre>
-              )
-            }}
-          />
+                  {tag.label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+        <div className="py-6">{page.data.content}</div>
+      </article>
     </main>
   );
 }
