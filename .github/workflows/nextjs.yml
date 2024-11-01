@@ -18,6 +18,7 @@ concurrency:
 
 env:
   NODE_VERSION: '20'
+  PNPM_VERSION: '8.15.1'  # Specify your pnpm version here
 
 jobs:
   build:
@@ -28,33 +29,36 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-            echo "lockfile=yarn.lock" >> $GITHUB_OUTPUT
-          elif [ -f "${{ github.workspace }}/package-lock.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            echo "lockfile=package-lock.json" >> $GITHUB_OUTPUT
-          else
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=npx" >> $GITHUB_OUTPUT
-            echo "lockfile=" >> $GITHUB_OUTPUT
-          fi
-
       - name: Setup Node.js
         id: setup-node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: ${{ steps.detect-package-manager.outputs.lockfile && format('{0}/{1}', github.workspace, steps.detect-package-manager.outputs.lockfile) }}
+
+      - name: Install pnpm
+        id: setup-pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        id: setup-pnpm-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        id: install
+        run: pnpm install --frozen-lockfile
 
       - name: Setup Pages
         id: setup-pages
@@ -63,23 +67,19 @@ jobs:
           static_site_generator: next
 
       - name: Restore Next.js build cache
-        id: restore-cache
+        id: restore-build-cache
         uses: actions/cache@v4
         with:
           path: |
             .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx', '**/*.json') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx', '**/*.json') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
             ${{ runner.os }}-nextjs-
-
-      - name: Install dependencies
-        id: install
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build Next.js site
         id: build
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: pnpm build
         env:
           NEXT_TELEMETRY_DISABLED: 1
 
