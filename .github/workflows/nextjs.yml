@@ -35,14 +35,17 @@ jobs:
             echo "manager=yarn" >> $GITHUB_OUTPUT
             echo "command=install" >> $GITHUB_OUTPUT
             echo "runner=yarn" >> $GITHUB_OUTPUT
+            echo "lockfile=yarn.lock" >> $GITHUB_OUTPUT
           elif [ -f "${{ github.workspace }}/package-lock.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
             echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            echo "lockfile=package-lock.json" >> $GITHUB_OUTPUT
           else
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=install" >> $GITHUB_OUTPUT
             echo "runner=npx" >> $GITHUB_OUTPUT
+            echo "lockfile=" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup Node.js
@@ -51,7 +54,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: '**/package-lock.json'
+          cache-dependency-path: ${{ steps.detect-package-manager.outputs.lockfile && format('{0}/{1}', github.workspace, steps.detect-package-manager.outputs.lockfile) }}
 
       - name: Setup Pages
         id: setup-pages
