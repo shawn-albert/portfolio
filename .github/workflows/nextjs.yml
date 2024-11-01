@@ -18,7 +18,7 @@ concurrency:
 
 env:
   NODE_VERSION: '20'
-  PNPM_VERSION: '8.15.1'  # Specify your pnpm version here
+  PNPM_VERSION: '9.12.3'
 
 jobs:
   build:
