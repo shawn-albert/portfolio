@@ -79,9 +79,19 @@ jobs:
 
       - name: Build Next.js site
         id: build
-        run: pnpm build
+        run: |
+          if ! grep -q '"export"' package.json; then
+            npm pkg set scripts.export="next export"
+          fi
+          
+          pnpm build
+          
+          if [ ! -d "out" ]; then
+            pnpm export
+          fi
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_BASE_PATH: ${{ env.NEXT_PUBLIC_BASE_PATH }}
 
       - name: Upload artifact
         id: upload
