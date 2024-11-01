@@ -2,15 +2,20 @@
 import React from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import MotionWrap from '@/components/motion-wrap';
-
 import ContactForm from './contact-form';
-
 import { contact } from '@/components/sections/contact/config';
-
 import { cn } from '@/lib/utils';
 import TextReveal from '@/components/motion/text-reveal';
-
 import Link from '@/components/motion/link';
+
+function StyledLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
+  return (
+    <div className={className}>
+      <Link href={href}>{children}</Link>
+    </div>
+  );
+}
+
 function Contact() {
   return (
     <MotionWrap className="w-full py-24 lg:py-32" id="contact">
@@ -30,8 +35,7 @@ function Contact() {
           <div className="flex w-full flex-col gap-4 py-3 lg:order-2 lg:w-1/4 lg:pl-3">
             <div>
               <p className="text-sm text-muted-foreground">Email</p>
-              {/* todo: seperate this into animated text and use an a instead */}
-              <Link
+              <StyledLink
                 className={cn(
                   buttonVariants({ variant: 'link' }),
                   'text-md h-min w-min p-0 font-normal'
@@ -39,14 +43,13 @@ function Contact() {
                 href={`mailto:${contact.email}`}
               >
                 {contact.email}
-              </Link>
+              </StyledLink>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Socials</p>
               <div className="flex flex-col gap-1">
                 {contact.socials.map(({ Icon, name, href }, index) => (
-                  <Link
-                    target="_blank"
+                  <StyledLink
                     href={href}
                     className={cn(
                       buttonVariants({ variant: 'link' }),
@@ -54,9 +57,11 @@ function Contact() {
                     )}
                     key={`contact-social_${index}`}
                   >
-                    {Icon && <Icon className="h-4 w-4" />}
-                    {name}
-                  </Link>
+                    <div className="flex items-center gap-1">
+                      {Icon && <Icon className="h-4 w-4" />}
+                      {name}
+                    </div>
+                  </StyledLink>
                 ))}
               </div>
             </div>
