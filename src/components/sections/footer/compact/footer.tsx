@@ -1,7 +1,15 @@
 import React from 'react';
-import Link from '@/components/motion/link';import { metadata as meta } from '@/app/config';
-
+import Link from '@/components/motion/link';
+import { metadata as meta } from '@/app/config';
 import { footer } from '@/components/sections/footer/config';
+
+function StyledLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
+  return (
+    <div className={className}>
+      <Link href={href}>{children}</Link>
+    </div>
+  );
+}
 
 function Footer() {
   return (
@@ -12,15 +20,14 @@ function Footer() {
       <nav className="flex gap-4 sm:ml-auto sm:gap-6">
         {footer.map((link, index) => {
           const { title, href } = link;
-
           return (
-            <Link
+            <StyledLink
               className="text-xs underline-offset-4 hover:underline"
               href={href}
-              key={`l_${index}`}
+              key={`footer-link-${index}`}
             >
               {title}
-            </Link>
+            </StyledLink>
           );
         })}
       </nav>
