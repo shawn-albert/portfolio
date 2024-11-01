@@ -5,9 +5,7 @@ import { motion } from 'framer-motion';
 import { CodeIcon, EllipsisIcon, MenuIcon, XIcon } from 'lucide-react';
 import ThemeToggle from '@/components/mode-toggle';
 import { linkLimit, links } from '@/components/sections/header/config';
-
 import { metadata as meta } from '@/app/config';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +16,19 @@ import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
   loader?: boolean;
+}
+
+function StyledLink({ href, children, className, onClick }: {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}) {
+  return (
+    <div className={className} onClick={onClick}>
+      <Link href={href}>{children}</Link>
+    </div>
+  );
 }
 
 const Header = ({ loader }: HeaderProps) => {
@@ -35,7 +46,6 @@ const Header = ({ loader }: HeaderProps) => {
     };
 
     window.addEventListener('resize', handleResize);
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -76,17 +86,17 @@ const Header = ({ loader }: HeaderProps) => {
         y: 0
       }}
       transition={{
-        delay: loader ? 3.5 : 0, // 3.5 for loading, .5 can be added for delay
+        delay: loader ? 3.5 : 0,
         duration: 0.8
       }}
     >
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <div className="flex w-full justify-between">
-          <Link href="/" className="flex items-center justify-center">
+          <StyledLink href="/" className="flex items-center justify-center">
             <span className="text-md font-semibold transition-transform hover:translate-x-1 hover:translate-y-1">
               {meta.author.name}
             </span>
-          </Link>
+          </StyledLink>
 
           <button className="md:hidden" onClick={toggleMenu}>
             <span className="sr-only">{isOpen ? 'Close' : 'Menu'}</span>
@@ -100,13 +110,13 @@ const Header = ({ loader }: HeaderProps) => {
             <nav className="flex items-center gap-4">
               <div className="flex items-center gap-4 lg:gap-6">
                 {links.slice(0, linkLimit).map(({ title, href }, index) => (
-                  <Link
+                  <StyledLink
                     className="flex items-center text-sm font-medium underline-offset-4 hover:underline"
                     href={href}
                     key={`header-desktop-link_${index}`}
                   >
                     {title}
-                  </Link>
+                  </StyledLink>
                 ))}
 
                 {links.length > linkLimit && (
@@ -147,14 +157,14 @@ const Header = ({ loader }: HeaderProps) => {
       >
         <div className="flex flex-col gap-4 p-4">
           {links.map(({ title, href }, index) => (
-            <Link
+            <StyledLink
               className="flex items-center text-sm font-medium underline-offset-4 hover:underline"
               href={href}
               onClick={toggleMenu}
               key={`header-mobile-link_${index}`}
             >
               {title}
-            </Link>
+            </StyledLink>
           ))}
           <div className="flex w-full items-center justify-end">
             <ThemeToggle />
