@@ -4,25 +4,24 @@ const trimLen: number = -1; // 0 is accordion only, -1 is does not restrict the 
 
 const skills: Skill[] = [
   {
-    name: 'Web Development',
-    // todo: use proper thumbnail pics
-    thumbnail: '/images/skills/web-development.jpg',
-    description: `Web Development involves creating websites and web applications that are both visually appealing and highly functional. It encompasses a variety of technologies, frameworks, and best practices to ensure a seamless user experience and efficient performance.`
+    name: 'Machine Learning Operations',
+    thumbnail: '/images/skills/mlops.jpg',
+    description: `Extensive experience building and optimizing ML infrastructure at scale, including end-to-end MLOps pipelines, model deployment automation, and training optimization. Specialized in AWS SageMaker, custom training solutions, and distributed systems for large-scale ML workloads.`
   },
   {
-    name: 'UI/UX Design',
-    thumbnail: '/images/skills/ui-ux-design.jpg',
-    description: `UI/UX Design focuses on creating delightful user experiences through visually appealing and highly functional designs. This skill includes a variety of technologies, frameworks, and best practices to enhance user satisfaction and usability.`
+    name: 'Cloud Architecture',
+    thumbnail: '/images/skills/cloud.jpg',
+    description: `Deep expertise in cloud-native architectures, particularly AWS services including EC2, ECS, EMR, SageMaker, and serverless technologies. Proven track record of building scalable, cost-efficient infrastructure for high-performance ML systems and data platforms.`
   },
   {
-    name: 'Database Management',
-    thumbnail: '/images/skills/database-management.jpg',
-    description: `Database Management involves efficiently storing and organizing data. This skill covers a range of technologies, frameworks, and best practices to ensure data integrity, security, and performance.`
+    name: 'AI/ML Engineering',
+    thumbnail: '/images/skills/ai.jpg',
+    description: `Strong background in implementing and optimizing AI systems, including LLMs, causal inference models, and custom ML solutions. Experience with model deployment, inference optimization, and building HIPAA-compliant AI workflows for healthcare applications.`
   },
   {
-    name: 'Mobile Development',
-    thumbnail: '/images/skills/mobile-development.jpg',
-    description: `Mobile Development entails crafting apps for smartphones and tablets that are both visually appealing and highly functional. It includes a variety of technologies, frameworks, and best practices to provide a seamless user experience on mobile devices.`
+    name: 'Data Platform Engineering',
+    thumbnail: '/images/skills/data.jpg',
+    description: `Expertise in designing and implementing modern data platforms using technologies like dbt, Spark, and AWS Glue. Skilled in building data lakehouses, ETL pipelines, and maintaining data quality at scale through automated testing and monitoring frameworks.`
   }
 ];
 
