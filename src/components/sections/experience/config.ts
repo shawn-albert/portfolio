@@ -1,13 +1,13 @@
 import { Experience } from '@/types/experience';
 
 const experiences: Experience[] = [
-  {
-    name: 'Director of Artificial Intelligence',
-    duration: '2023 - Present',
-    company: 'Belle',
-    description:
-      'Leading AI innovation in healthcare, architecting agentic workflows with Amazon Bedrock, building MLOps foundations, and implementing causal inference models. Developed HIPAA-compliant AI systems for clinical documentation and patient care optimization.'
-  },
+{
+  name: 'Director of Artificial Intelligence',
+  duration: '2023 - 2024',
+  company: 'Belle',
+  description:
+    "Advanced diabetic foot care through AI innovation, engineering intelligent systems for clinical documentation and care optimization. Built the company's first MLOps platform and modern data lakehouse while architecting HIPAA-compliant workflows with Amazon Bedrock that transformed patient interactions into structured medical insights."
+},
   {
     name: 'Lead Data Scientist & Senior Manager',
     duration: '2022 - 2023',
