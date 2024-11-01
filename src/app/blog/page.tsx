@@ -1,12 +1,11 @@
+// app/blog/page.tsx
 import Link from 'next/link';
 import { blog } from '@/app/source';
 import TextReveal from '@/components/motion/text-reveal';
 import Line from '@/components/motion/line';
 import React from 'react';
-
 import { createMetadata } from '@/lib/metadata';
 import PostCard from '@/app/blog/_components/post-card';
-
 import { metadata as meta } from '@/app/config';
 import type { WithContext, Blog } from 'schema-dts';
 
@@ -61,24 +60,14 @@ export default function BlogPage(): React.ReactElement {
           <h1 className="leading-wide tracking-relaxed text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
             <TextReveal delay={0.2}>Blog</TextReveal>
           </h1>
-
           <Line className={'mt-16'} />
         </div>
-        {/*<motion.div*/}
-        {/*  className="absolute bottom-8 left-1/2 -translate-x-1/2 transform"*/}
-        {/*  style={{ opacity }}*/}
-        {/*  animate={{ y: [0, 10, 0] }}*/}
-        {/*  transition={{ duration: 1.5, repeat: Infinity }}*/}
-        {/*>*/}
-        {/*  <ChevronDown className="h-8 w-8" />*/}
-        {/*</motion.div>*/}
       </section>
-      {/*className="container max-sm:px-0 md:py-12"*/}
       <section className="grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 2xl:grid-cols-3">
         {posts.map((post, index) => (
           <PostCard
             title={post.data.title}
-            href={post.url}
+            href={post.url || ''}
             description={post.data.description}
             key={`post_${index}`}
             date={new Date(post.data.date ?? post.file.name)}
