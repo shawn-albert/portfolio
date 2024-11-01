@@ -2,32 +2,32 @@ import { Experience } from '@/types/experience';
 
 const experiences: Experience[] = [
   {
-    name: 'Web Development',
-    duration: '2022 - Present',
-    company: 'Acme Inc',
+    name: 'Director of Artificial Intelligence',
+    duration: '2023 - Present',
+    company: 'Belle',
     description:
-      'Building beautiful and functional websites using modern web technologies, focusing on performance, accessibility, and SEO-friendly design.'
+      'Leading AI innovation in healthcare, architecting agentic workflows with Amazon Bedrock, building MLOps foundations, and implementing causal inference models. Developed HIPAA-compliant AI systems for clinical documentation and patient care optimization.'
   },
   {
-    name: 'UI/UX Design',
-    duration: '2021 - 2022',
-    company: 'Creative Designs Ltd',
+    name: 'Lead Data Scientist & Senior Manager',
+    duration: '2022 - 2023',
+    company: 'Healthfirst',
     description:
-      'Creating delightful and intuitive user experiences, specializing in responsive design and user-centric methodologies.'
+      'Spearheaded enterprise-wide MLOps initiatives, reducing model deployment time from weeks to days. Led development of innovative LLM database query assistant, enabling natural language interaction with healthcare data systems.'
   },
   {
-    name: 'Database Management',
+    name: 'Senior Data Scientist',
     duration: '2020 - 2022',
-    company: 'DataTech Solutions',
+    company: 'Aetna, a CVS Health Company',
     description:
-      'Storing and organizing data efficiently, ensuring data integrity, and optimizing database queries for high traffic applications.'
+      'Led strategic analytics projects in clinical product development, launching data science campaigns with $7.1M annual savings. Developed Enhanced Maternity Program serving 9.7M lives with $37M annual revenue.'
   },
   {
-    name: 'Mobile Development',
-    duration: '2019 - 2021',
-    company: 'Innovative Apps Inc',
+    name: 'Data Scientist',
+    duration: '2018 - 2020',
+    company: 'Blue Cross Blue Shield',
     description:
-      'Crafting engaging and scalable apps for smartphones and tablets, focusing on cross-platform development and native performance.'
+      'Developed provider cost efficiency metrics and led implementation of health data exchange system processing 15.2M+ records. Created visualization dashboards for clinical quality metrics and network optimization.'
   }
 ];
 
