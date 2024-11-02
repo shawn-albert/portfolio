@@ -1,37 +1,19 @@
 'use client';
 
 import { useAction } from 'next-safe-action/hooks';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { TurnstileModal } from '@/components/sections/contact/_components/turnstile-modal';
 import { LoaderCircleIcon } from 'lucide-react';
 import { contactSubmit } from '@/app/actions';
-
 import { FormError } from '@/components/sections/contact/_components/form-error';
 import { FormSuccess } from '@/components/sections/contact/_components/form-success';
-
-import {
-  ContactForm as ContactFormType,
-  ContactFormSchema
-} from '@/lib/validators';
-import { useState } from 'react';
-
+import { ContactForm as ContactFormType, ContactFormSchema } from '@/lib/validators';
+import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
 export default function ContactForm() {
@@ -47,14 +29,11 @@ export default function ContactForm() {
   const { execute, result, status } = useAction(contactSubmit);
   const [isOpen, setIsOpen] = useState(false);
 
-  // todo: probably refactor this, setIsOpen is not clean
-  // values: ContactFormType
-  async function onSubmit() {
+  const onSubmit = useCallback(async () => {
     setIsOpen(true);
-    // execute(values);
-  }
+  }, []);
 
-  async function onVerify(token?: string) {
+  const onVerify = useCallback(async (token?: string) => {
     setIsOpen(false);
     if (!token) {
       toast.error(
@@ -66,7 +45,7 @@ export default function ContactForm() {
       return;
     }
     execute({ ...form.getValues(), token });
-  }
+  }, [execute, form]);
 
   return (
     <div>
@@ -115,9 +94,7 @@ export default function ContactForm() {
                 <FormControl>
                   <Textarea
                     disabled={status === 'executing'}
-                    placeholder={
-                      'Hello!\n\nThis is Jane Doe, from Example. Just wanted to say hi!'
-                    }
+                    placeholder={'Hello!\n\nThis is Jane Doe, from Example. Just wanted to say hi!'}
                     {...field}
                   />
                 </FormControl>
@@ -132,7 +109,7 @@ export default function ContactForm() {
           <Button
             disabled={status === 'executing'}
             type="submit"
-            className={'w-full'}
+            className="w-full"
           >
             {status === 'executing' && (
               <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
