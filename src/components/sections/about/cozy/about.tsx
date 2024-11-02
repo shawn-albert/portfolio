@@ -18,10 +18,7 @@ function About() {
             <div className="space-y-4">
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 <TextReveal>
-                  I am a passionate and creative Web Developer with a love for
-                  beautiful and functional websites. I have experience working
-                  with a variety of web technologies and frameworks and I am
-                  always eager to learn new things and take on new challenges.
+                  I architect scalable AI infrastructure and machine learning platforms, specializing in building the systems that power modern AI applications. With experience leading MLOps initiatives and developing cloud-native solutions, I focus on creating robust, efficient platforms that enable AI innovation.
                 </TextReveal>
               </p>
               <div className="flex gap-2">
