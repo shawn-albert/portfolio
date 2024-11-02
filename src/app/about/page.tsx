@@ -10,19 +10,19 @@ const education = [
     school: "The University of Chicago Booth School of Business",
     degree: "Master of Business Administration (MBA)",
     field: "Entrepreneurship and Strategic Management",
-    duration: "2021 - 2023"
+    duration: "2017 - 2020"
   },
   {
     school: "The University of Chicago",
     degree: "Master of Science (MS)",
     field: "Computer Science",
-    duration: "2020 - 2022"
+    duration: "2017 - 2020"
   },
   {
     school: "Vanderbilt University",
     degree: "Bachelor of Arts (BA)",
     field: "Medicine, Health and Society | Molecular and Cellular Biology",
-    duration: "2014 - 2018"
+    duration: "2012 - 2016"
   }
 ];
 
