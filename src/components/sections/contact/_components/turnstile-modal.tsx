@@ -22,7 +22,7 @@ interface TurnstileModalProps {
 export function TurnstileModal({ open, callback }: TurnstileModalProps) {
   const { theme } = useTheme();
 
-  const [, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [, setTurnstileStatus] = useState<
     'success' | 'error' | 'expired' | 'required'
   >('required');
@@ -43,7 +43,7 @@ export function TurnstileModal({ open, callback }: TurnstileModalProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="relative flex flex-col py-4 md:py-0">
-          <div className={'z-10 px-4 md:px-0'}>
+          <div className="z-10 px-4 md:px-0">
             <Turnstile
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
               onWidgetLoad={() => setIsLoading(false)}
@@ -60,29 +60,21 @@ export function TurnstileModal({ open, callback }: TurnstileModalProps) {
               }}
             />
           </div>
-          <div className={'z-1 absolute h-[65px] w-full px-4 md:px-0 md:py-0'}>
-            <div
-              className={
-                'flex h-[65px] w-full items-center justify-between rounded-md border border-border border-muted-foreground/50 bg-muted px-4'
-              }
-            >
-              <div className={'flex items-center justify-center gap-2'}>
-                <div
-                  className={
-                    'inline-flex h-[30px] w-[30px] items-center justify-center rounded-full bg-background p-1'
-                  }
-                >
-                  <LoaderCircleIcon className="h-7 w-7 animate-spin" />
+          {isLoading && (
+            <div className="z-1 absolute h-[65px] w-full px-4 md:px-0 md:py-0">
+              <div className="flex h-[65px] w-full items-center justify-between rounded-md border border-border border-muted-foreground/50 bg-muted px-4">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-full bg-background p-1">
+                    <LoaderCircleIcon className="h-7 w-7 animate-spin" />
+                  </div>
+                  Loading
                 </div>
-                Loading
-              </div>
-              <div>
-                <p className={'max-w-[60px] text-xs font-semibold'}>
-                  Cloudflare Turnstile
-                </p>
+                <div>
+                  <p className="max-w-[60px] text-xs font-semibold">Cloudflare Turnstile</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
