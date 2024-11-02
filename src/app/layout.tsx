@@ -5,6 +5,7 @@ import {
   Montserrat
 } from 'next/font/google';
 import '@/styles/globals.css';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { Toaster } from '@/components/ui/sonner';
 
@@ -42,6 +43,7 @@ export default function RootLayout({
           {children}
           <Toaster />
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   );
