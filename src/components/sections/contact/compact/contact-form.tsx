@@ -62,9 +62,6 @@ export default function ContactForm() {
       setFormData(null);
     } catch (error) {
       console.error('Form submission error:', error);
-      toast.error('Verification failed. Please try again.', {
-        position: 'bottom-center'
-      });
     }
   }
 
@@ -139,10 +136,7 @@ export default function ContactForm() {
           </Button>
         </form>
       </Form>
-      <TurnstileModal
-        open={isOpen}
-        callback={onVerify}
-      />
+      <TurnstileModal open={isOpen} callback={onVerify} />
     </div>
   );
 }
