@@ -1,18 +1,26 @@
-'use client';
-
 import { useAction } from 'next-safe-action/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
 import { TurnstileModal } from '@/components/sections/contact/_components/turnstile-modal';
 import { LoaderCircleIcon } from 'lucide-react';
 import { contactSubmit } from '@/app/actions';
 import { FormError } from '@/components/sections/contact/_components/form-error';
 import { FormSuccess } from '@/components/sections/contact/_components/form-success';
-import { ContactForm as ContactFormType, ContactFormSchema } from '@/lib/validators';
+import {
+  ContactForm as ContactFormType,
+  ContactFormSchema
+} from '@/lib/validators';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -28,20 +36,33 @@ export default function ContactForm() {
 
   const { execute, result, status } = useAction(contactSubmit);
   const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState<ContactFormType | null>(null);
 
-  async function onSubmit() {
+  async function onSubmit(values: ContactFormType) {
+    setFormData(values);
     setIsOpen(true);
   }
 
   async function onVerify(token?: string) {
     setIsOpen(false);
-    if (!token) {
-      toast.error('Captcha validation failed. Please ensure the captcha is completed.', {
-        position: 'bottom-center'
-      });
+
+    if (!token || !formData) {
+      toast.error(
+        'Captcha validation failed. Please ensure the captcha is completed.',
+        {
+          position: 'bottom-center'
+        }
+      );
       return;
     }
-    execute({ ...form.getValues(), token });
+
+    try {
+      await execute({ ...formData, token });
+      form.reset();
+      setFormData(null);
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
   }
 
   return (
@@ -91,7 +112,7 @@ export default function ContactForm() {
                 <FormControl>
                   <Textarea
                     disabled={status === 'executing'}
-                    placeholder="Hello! This is Jane Doe, from Example. Just wanted to say hi!"
+                    placeholder={'Hello!\n\nThis is Jane Doe, from Example. Just wanted to say hi!'}
                     {...field}
                   />
                 </FormControl>
@@ -106,7 +127,7 @@ export default function ContactForm() {
           <Button
             disabled={status === 'executing'}
             type="submit"
-            className="w-full"
+            className={'w-full'}
           >
             {status === 'executing' && (
               <LoaderCircleIcon className="mr-2 h-4 w-4 animate-spin" />
