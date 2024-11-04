@@ -1,0 +1,60 @@
+---
+title: Agentic AI Clinical Documentation Pipeline
+description: Serverless AI pipeline that transforms patient conversations into structured clinical documentation using AWS's AI services for automated medical transcription, SOAP note generation, and medical entity extraction.
+date: 2024-10-18
+tags:
+  - label: Amazon Bedrock
+  - label: Amazon Transcribe Medical
+  - label: Amazon Comprehend Medical 
+  - label: AWS Step Functions
+  - label: Apache Iceberg
+  - label: AWS Athena
+  - label: AWS S3
+  - label: Serverless
+thumbnail: /images/projects/ai-clinical-documentation/cover.jpg
+---
+
+<section className="space-y-6">
+
+## Overview
+
+Built an autonomous, serverless pipeline that transforms care manager-patient conversations into structured clinical documentation and billable insights. The system orchestrates multiple AWS AI services through Step Functions to create a fully automated documentation workflow.
+
+## Pipeline Flow
+
+1. Care manager calls are automatically captured and landed in S3
+2. Event-driven triggers initiate the serverless processing pipeline
+3. Amazon Transcribe Medical converts medical conversations to accurate text
+4. Amazon Bedrock generates comprehensive SOAP notes from transcriptions
+5. Amazon Comprehend Medical extracts structured medical entities
+6. Processed data is stored in Apache Iceberg format via Athena for downstream analysis
+
+## Technical Architecture
+
+<div className="space-y-2">
+- Implemented event-driven S3 triggers for automated audio file processing
+- Leveraged Amazon Transcribe Medical for accurate medical transcription
+- Utilized Amazon Bedrock for generating comprehensive SOAP notes
+- Integrated Amazon Comprehend Medical to extract:
+    - ICD-10 diagnostic codes
+    - Prescription information
+    - Social determinants of health
+    - SNOMED clinical terms
+- Stored processed data in queryable format enabling reporting and ML model development
+</div>
+
+## Key Achievements
+
+<div className="space-y-2">
+- Built HIPAA-compliant data workflows implementing data encryption and role-based access controls with least-privilege principles
+- Designed scalable architecture handling parallel processing of multiple care manager calls
+- Implemented comprehensive error handling and monitoring
+- Significantly reduced manual documentation overhead while improving billing accuracy
+- Enabled downstream healthcare analytics through structured data storage
+</div>
+
+## Impact
+
+The pipeline transforms the clinical documentation process from a manual task to an automated workflow, enabling healthcare providers to maximize direct patient care time while maintaining documentation accuracy and compliance standards.
+
+</section>
