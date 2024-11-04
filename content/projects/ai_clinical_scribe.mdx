@@ -1,6 +1,6 @@
 ---
 title: Agentic AI Clinical Documentation Pipeline
-description: Serverless AI pipeline that transforms patient conversations into structured clinical documentation using AWS's AI services for automated medical transcription, SOAP note generation, and medical entity extraction.
+description: Serverless AI pipeline that transforms patient conversations into clinical documentation using AWS's AI services for automated medical transcription, SOAP note generation, and medical entity extraction.
 date: 2024-10-18
 tags:
   - label: Amazon Bedrock
@@ -21,7 +21,7 @@ thumbnail: /images/projects/ai-clinical-documentation/cover.jpg
 
 ## Overview
 
-Built an autonomous, serverless pipeline that transforms care manager-patient conversations into structured clinical documentation and billable insights. The system orchestrates multiple AWS AI services through Step Functions to create a fully automated documentation workflow with comprehensive monitoring and alerting.
+Built an autonomous, serverless pipeline that transforms care manager-patient conversations into clinical documentation and billable insights. The system orchestrates multiple AWS AI services through Step Functions to create a fully automated documentation workflow with comprehensive monitoring and alerting.
 
 ## Pipeline Flow
 
@@ -29,13 +29,13 @@ Built an autonomous, serverless pipeline that transforms care manager-patient co
 2. Event-driven triggers initiate the serverless processing pipeline
 3. Amazon Transcribe Medical converts medical conversations to accurate text
 4. Amazon Bedrock generates comprehensive SOAP notes from transcriptions
-5. Amazon Comprehend Medical extracts structured medical entities
+5. Amazon Comprehend Medical extracts medical entities
 6. Processed data is stored in Apache Iceberg format via Athena for downstream analysis
 7. Pipeline status monitoring and notifications:
    - Step Function completion triggers SNS notification
-   - Success updates routed to team Slack channel via AWS ChatBot
+   - Success updates routed to team Slack channel via AWS Chatbot
    - Failure alerts trigger immediate team notification
-   - CloudWatch alarms monitor notification delivery with automated fallback
+   - CloudWatch alarms monitor notification delivery and email team members on failure
 
 ## Technical Architecture
 
@@ -59,7 +59,7 @@ Built an autonomous, serverless pipeline that transforms care manager-patient co
 - Built HIPAA-compliant data workflows implementing data encryption and role-based access controls with least-privilege principles
 - Designed scalable architecture handling parallel processing of multiple care manager calls
 - Implemented comprehensive error handling with automated notification system
-- Created real-time monitoring dashboard with ChatBot-enabled troubleshooting
+- Created real-time monitoring dashboard with Chatbot-enabled troubleshooting
 - Significantly reduced manual documentation overhead while improving billing accuracy
 - Enabled downstream healthcare analytics by storing JSON data in Apache Iceberg tables integrated with AWS Glue Data Catalog
 </div>
