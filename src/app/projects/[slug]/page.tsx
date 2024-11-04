@@ -6,6 +6,8 @@ import { metadata as meta } from '@/app/config';
 import type { Article, WithContext } from 'schema-dts';
 import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import fs from 'fs/promises';
+import path from 'path';
 
 interface ProjectPageProps {
   params: {
@@ -24,6 +26,16 @@ interface ProjectData {
   icon?: string;
   full?: boolean;
   _openapi?: Record<string, unknown>;
+}
+
+async function getSvgDiagram(slug: string): Promise<string | null> {
+  try {
+    const svgPath = path.join(process.cwd(), 'public', 'diagrams', `${slug}.svg`);
+    const svgContent = await fs.readFile(svgPath, 'utf8');
+    return svgContent;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function generateStaticParams() {
@@ -89,8 +101,9 @@ const mdxComponents = {
   )
 };
 
-export default function ProjectPage({ params }: ProjectPageProps): React.ReactElement {
+export default async function ProjectPage({ params }: ProjectPageProps): Promise<React.ReactElement> {
   const page = project.getPage([params.slug]);
+  const svgDiagram = await getSvgDiagram(params.slug);
 
   if (!page) {
     notFound();
@@ -157,6 +170,14 @@ export default function ProjectPage({ params }: ProjectPageProps): React.ReactEl
             </div>
           )}
         </div>
+        {svgDiagram && (
+          <div className="w-full my-8">
+            <div
+              className="w-full [&>svg]:w-full [&>svg]:h-auto"
+              dangerouslySetInnerHTML={{ __html: svgDiagram }}
+            />
+          </div>
+        )}
         <div className="py-6">
           <MDXRemote source={page.data.content} components={mdxComponents} />
         </div>

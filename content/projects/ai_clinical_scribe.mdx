@@ -11,6 +11,9 @@ tags:
   - label: AWS Athena
   - label: AWS S3
   - label: Serverless
+  - label: AWS SNS
+  - label: AWS Chatbot
+  - label: AWS Cloudwatch
 thumbnail: /images/projects/ai-clinical-documentation/cover.jpg
 ---
 
@@ -18,7 +21,7 @@ thumbnail: /images/projects/ai-clinical-documentation/cover.jpg
 
 ## Overview
 
-Built an autonomous, serverless pipeline that transforms care manager-patient conversations into structured clinical documentation and billable insights. The system orchestrates multiple AWS AI services through Step Functions to create a fully automated documentation workflow.
+Built an autonomous, serverless pipeline that transforms care manager-patient conversations into structured clinical documentation and billable insights. The system orchestrates multiple AWS AI services through Step Functions to create a fully automated documentation workflow with comprehensive monitoring and alerting.
 
 ## Pipeline Flow
 
@@ -28,6 +31,11 @@ Built an autonomous, serverless pipeline that transforms care manager-patient co
 4. Amazon Bedrock generates comprehensive SOAP notes from transcriptions
 5. Amazon Comprehend Medical extracts structured medical entities
 6. Processed data is stored in Apache Iceberg format via Athena for downstream analysis
+7. Pipeline status monitoring and notifications:
+   - Step Function completion triggers SNS notification
+   - Success updates routed to team Slack channel via AWS ChatBot
+   - Failure alerts trigger immediate team notification
+   - CloudWatch alarms monitor notification delivery with automated fallback
 
 ## Technical Architecture
 
@@ -41,6 +49,8 @@ Built an autonomous, serverless pipeline that transforms care manager-patient co
     - Social determinants of health
     - SNOMED clinical terms
 - Stored processed data in queryable format enabling reporting and ML model development
+- Configured SNS topics and subscriptions for automated alerting
+- Implemented AWS Chatbot integration for streamlined incident response
 </div>
 
 ## Key Achievements
@@ -48,13 +58,14 @@ Built an autonomous, serverless pipeline that transforms care manager-patient co
 <div className="space-y-2">
 - Built HIPAA-compliant data workflows implementing data encryption and role-based access controls with least-privilege principles
 - Designed scalable architecture handling parallel processing of multiple care manager calls
-- Implemented comprehensive error handling and monitoring
+- Implemented comprehensive error handling with automated notification system
+- Created real-time monitoring dashboard with ChatBot-enabled troubleshooting
 - Significantly reduced manual documentation overhead while improving billing accuracy
-- Enabled downstream healthcare analytics through structured data storage
+- Enabled downstream healthcare analytics by storing JSON data in Apache Iceberg tables integrated with AWS Glue Data Catalog
 </div>
 
 ## Impact
 
-The pipeline transforms the clinical documentation process from a manual task to an automated workflow, enabling healthcare providers to maximize direct patient care time while maintaining documentation accuracy and compliance standards.
+The pipeline transforms the clinical documentation process from a manual task to an automated workflow, enabling healthcare providers to maximize direct patient care time while maintaining documentation accuracy and compliance standards. The robust monitoring and notification system ensures reliable operation with minimal manual oversight.
 
 </section>
