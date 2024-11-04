@@ -1,0 +1,168 @@
+---
+title: Agentic AI Clinical Documentation Pipeline
+description: Serverless AI pipeline that transforms patient conversations into clinical documentation using AWS's AI services for automated medical transcription, SOAP note generation, and medical entity extraction.
+date: 2024-11-04
+author: Shawn Albert
+tags:
+  - Amazon Bedrock
+  - Amazon Transcribe Medical
+  - Amazon Comprehend Medical 
+  - AWS Step Functions
+  - Apache Iceberg
+  - AWS Athena
+  - AWS Serverless
+---
+
+import mermaid from '@components/mermaid';
+
+# Agentic AI Clinical Documentation Pipeline
+
+I built a serverless pipeline that transforms clinical conversations into clinical documentation using AWS's AI services, with a focus on creating queryable, analytics-ready data in Apache Iceberg format.
+
+## The Challenge 
+
+Care managers record conversations that need to be converted into formal SOAP notes (Subjective, Objective, Assessment, Plan). The challenge isn't just transcription - it's creating an automated data pipeline that:
+
+- Accurately captures medical terminology and speaker context
+- Extracts standardized medical codes (ICD-10, RxNorm, SNOMED CT)
+- Stores the data in a format optimized for healthcare analytics
+- Maintains HIPAA compliance throughout the workflow
+
+## Architecture
+
+<mermaid chart={`
+flowchart LR
+    A[Audio File in S3] --> B1[AWS Transcribe Medical]
+    A --> B2[Start HealthScribe Job]
+    B1 --> C[Transcription Job]
+    B2 --> J[HealthScribe Job Processing]
+    C --> D[Transcription JSON in S3]
+    J --> K[Summary JSON in S3]
+    D --> E[Process Transcription]
+    E --> F[Generate SOAP Note]
+    F --> G[Extract Medical Codes]
+    G --> H[Store in Apache Iceberg]
+`} />
+
+## Core Components
+
+### 1. Medical Transcription 
+
+I configured Amazon Transcribe Medical specifically for clinical conversations:
+
+```python
+response = transcribe.start_medical_transcription_job(
+    MedicalTranscriptionJobName=job_name,
+    LanguageCode="en-US",  # Only valid option for medical transcription
+    Media={"MediaFileUri": str(media_uri)},
+    OutputBucketName=bucket,
+    Settings={
+        "ShowSpeakerLabels": True,
+        "MaxSpeakerLabels": 2,
+    },
+    Specialty="PRIMARYCARE",  # Required for medical transcription
+    Type="CONVERSATION"  # Specifies doctor-patient dialogue
+)
+```
+
+This setup captures both the medical terminology and the conversation dynamics between care manager and patient.
+
+### 2. Parallel SOAP Note Processing
+
+The system processes SOAP sections independently to enable future specialization:
+
+```python
+def create_generate_soap_note_task(self) -> sfn.Chain:
+    section_generators = []
+    
+    for section in ["subjective", "objective", "assessment", "plan"]:
+        generate_section = get_anthropic_claude_invoke_chain(
+            self,
+            f"Generate{section.capitalize()}Section",
+            prompt=section_specific_prompt,
+            max_tokens_to_sample=2000,
+            temperature=0
+        )
+        section_generators.append(generate_section)
+```
+
+This modular design allows for:
+- Section-specific model optimization
+- Independent quality monitoring
+- Parallel processing
+- Future incorporation of specialized medical models
+
+### 3. Data Storage with Apache Iceberg
+
+The most interesting part is how the data is structured for analysis. The finalize_output Lambda converts complex clinical data into queryable Iceberg tables using the AWS SDK for pandas (awswrangler), a library that integrates pandas functionality to AWS services. The library is easily added via a [Lambda layer](https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html).
+
+```python
+def write_to_iceberg(record: Dict[str, Any], bucket: str, database: str, table: str):
+    df = pd.DataFrame([record])
+    
+    # Store complex objects as queryable JSON
+    df["soap_note"] = df["soap_note"].apply(json.dumps)
+    df["medical_codes"] = df["medical_codes"].apply(json.dumps)
+
+    # Define schema for clinical data
+    dtype = {
+        "external_call_id": "string",
+        "processed_at": "timestamp",
+        "soap_note": "string",  # JSON containing SOAP sections
+        "medical_codes": "string",  # JSON containing extracted codes
+    }
+
+    # Configure Iceberg table with optimizations
+    wr.athena.to_iceberg(
+        df=df,
+        database=database,
+        table=table,
+        schema_evolution=True,
+        encryption="SSE_S3",
+        additional_table_properties={
+            "write_target_data_file_size_bytes": "536870912",
+            "format-version": "2",
+        }
+    )
+```
+
+The pipeline stores SOAP notes and medical codes as JSON strings within Iceberg tables, enabling complex queries through Athena's JSON functions. This approach provides several benefits:
+
+1. **Schema Flexibility**: New fields can be added to the SOAP notes or medical codes without requiring table alterations
+2. **Optimized Storage**: Large clinical text is compressed and stored efficiently
+3. **SQL Accessibility**: Complex nested data becomes queryable through standard SQL:
+
+```sql
+SELECT 
+  external_call_id,
+  processed_at,
+  -- Extract specific SOAP sections
+  JSON_EXTRACT_SCALAR(soap_note, '$.subjective') as subjective,
+  JSON_EXTRACT_SCALAR(soap_note, '$.objective') as objective,
+  -- Extract and analyze medical codes
+  JSON_EXTRACT(medical_codes, '$.icd10_codes') as diagnoses,
+  JSON_EXTRACT(medical_codes, '$.rx_codes') as medications
+FROM clinical_data.soap_notes
+WHERE processed_at > CURRENT_DATE - INTERVAL '30' DAY;
+```
+
+This setup enables downstream analytics while maintaining the original document structure. The Iceberg format also provides ACID transactions and time travel capabilities, crucial for healthcare data management.
+
+## Future Work
+
+I'm currently exploring:
+
+1. **Analytics Enhancements**
+   - Creating standardized clinical metrics views
+   - Building trend analysis pipelines
+   - Implementing quality scoring for SOAP notes
+
+2. **Model Improvements**  
+   - Testing specialized medical models for each SOAP section
+   - Adding automated quality checks for generated notes
+   - Expanding medical code extraction coverage
+
+3. **Data Pipeline Optimization**
+   - Implementing data partitioning strategies
+   - Adding data quality validation steps
+   - Building automated testing for the extraction pipeline
