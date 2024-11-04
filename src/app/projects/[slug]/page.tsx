@@ -5,6 +5,7 @@ import { createMetadata } from '@/lib/metadata';
 import { metadata as meta } from '@/app/config';
 import type { Article, WithContext } from 'schema-dts';
 import React from 'react';
+import { MDXRemote } from 'next-mdx-remote/rsc';
 
 interface ProjectPageProps {
   params: {
@@ -73,6 +74,21 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   });
 }
 
+const mdxComponents = {
+  section: (props: React.HTMLAttributes<HTMLElement>) => (
+    <section {...props} className="space-y-6" />
+  ),
+  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2 {...props} className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 mt-8" />
+  ),
+  ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul {...props} className="list-disc pl-6 space-y-2" />
+  ),
+  p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p {...props} className="leading-7 [&:not(:first-child)]:mt-6" />
+  )
+};
+
 export default function ProjectPage({ params }: ProjectPageProps): React.ReactElement {
   const page = project.getPage([params.slug]);
 
@@ -108,14 +124,16 @@ export default function ProjectPage({ params }: ProjectPageProps): React.ReactEl
   };
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 mt-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <article className="prose mx-auto max-w-4xl dark:prose-invert">
-        <div className="space-y-4 py-6">
-          <h1 className="text-4xl font-bold">{page.data.title}</h1>
+      <article className="prose prose-slate mx-auto max-w-4xl dark:prose-invert lg:prose-lg">
+        <div className="space-y-4 py-12">
+          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+            {page.data.title}
+          </h1>
           {page.data.description && (
             <p className="text-xl text-muted-foreground">
               {page.data.description}
@@ -139,7 +157,9 @@ export default function ProjectPage({ params }: ProjectPageProps): React.ReactEl
             </div>
           )}
         </div>
-        <div className="py-6">{page.data.content}</div>
+        <div className="py-6">
+          <MDXRemote source={page.data.content} components={mdxComponents} />
+        </div>
       </article>
     </main>
   );

@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss';
 
 const config = {
@@ -51,6 +52,35 @@ const config = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
+        }
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            h2: {
+              marginTop: '2rem',
+              marginBottom: '1rem',
+              fontWeight: '700'
+            },
+            h3: {
+              marginTop: '1.5rem',
+              marginBottom: '0.75rem',
+              fontWeight: '600'
+            },
+            ul: {
+              marginTop: '1rem',
+              marginBottom: '1rem',
+              paddingLeft: '1.5rem'
+            },
+            li: {
+              marginTop: '0.5rem',
+              marginBottom: '0.5rem'
+            },
+            p: {
+              marginTop: '1rem',
+              marginBottom: '1rem'
+            }
+          }
         }
       },
       borderRadius: {
