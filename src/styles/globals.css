@@ -60,6 +60,7 @@
 }
 
 @layer base {
+
   html.lenis,
   html.lenis body {
     @apply h-auto;
@@ -84,7 +85,169 @@
 
 @layer utilities {
   .shadow-sm {
-    /* todo: cleanup css */
     @apply shadow-none;
   }
+}
+
+/* Syntax Highlighting Styles */
+.prose pre {
+  @apply bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-800;
+}
+
+.prose pre>code {
+  @apply grid p-4 text-sm bg-transparent;
+  counter-reset: line;
+}
+
+.prose code {
+  @apply rounded-md bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 text-sm font-normal;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0 text-neutral-50;
+  counter-increment: line;
+}
+
+.prose pre [data-line] {
+  @apply px-4 border-l-2 border-l-transparent;
+}
+
+.prose pre [data-highlighted-line] {
+  @apply border-l-primary bg-neutral-800/50;
+}
+
+.prose pre [data-highlighted-chars] {
+  @apply bg-neutral-800/50 rounded;
+}
+
+.prose pre [data-chars-id] {
+  @apply shadow-none px-1;
+}
+
+.prose pre .line {
+  @apply px-4;
+}
+
+.prose pre .line::before {
+  @apply text-neutral-600 mr-4;
+  content: counter(line);
+}
+
+/* Mermaid Diagram Styles */
+.mermaid {
+  @apply bg-white dark:bg-neutral-900 rounded-lg p-4 my-8 mx-auto max-w-full overflow-x-auto;
+  min-width: 480px;
+}
+
+.mermaid svg {
+  @apply mx-auto;
+}
+
+[data-theme="dark"] .mermaid {
+  @apply bg-neutral-900;
+}
+
+.mermaid .label {
+  @apply font-sans;
+}
+
+.mermaid .nodeLabel {
+  @apply text-neutral-900 dark:text-neutral-50;
+}
+
+.mermaid .edgeLabel {
+  @apply bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon {
+  @apply fill-white dark:fill-neutral-800 stroke-neutral-300 dark:stroke-neutral-600;
+}
+
+.mermaid .node.current rect,
+.mermaid .node.current circle,
+.mermaid .node.current polygon {
+  @apply fill-blue-50 dark:fill-blue-900/30 stroke-blue-500;
+}
+
+.mermaid .edgePath .path {
+  @apply stroke-neutral-400 dark:stroke-neutral-500;
+}
+
+.mermaid .edgePath marker {
+  @apply fill-neutral-400 dark:fill-neutral-500;
+}
+
+.mermaid .cluster rect {
+  @apply fill-neutral-50 dark:fill-neutral-800/30 stroke-neutral-200 dark:stroke-neutral-700;
+}
+
+/* Additional prose styles for better content formatting */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply font-bold scroll-m-20;
+}
+
+.prose h1 {
+  @apply text-4xl mt-8 mb-4;
+}
+
+.prose h2 {
+  @apply text-3xl mt-8 mb-4;
+}
+
+.prose h3 {
+  @apply text-2xl mt-6 mb-3;
+}
+
+.prose h4 {
+  @apply text-xl mt-4 mb-2;
+}
+
+.prose p {
+  @apply leading-7 mb-4;
+}
+
+.prose a {
+  @apply text-primary hover:underline;
+}
+
+.prose ul,
+.prose ol {
+  @apply my-6 ml-6;
+}
+
+.prose li {
+  @apply my-2;
+}
+
+.prose hr {
+  @apply my-8 border-neutral-200 dark:border-neutral-800;
+}
+
+.prose blockquote {
+  @apply pl-6 border-l-2 border-neutral-300 dark:border-neutral-700 my-6 text-neutral-800 dark:text-neutral-200;
+}
+
+.prose img {
+  @apply rounded-lg my-8 mx-auto;
+}
+
+.prose table {
+  @apply w-full my-6;
+}
+
+.prose table th {
+  @apply bg-neutral-100 dark:bg-neutral-800 p-2 text-left;
+}
+
+.prose table td {
+  @apply p-2 border-t border-neutral-200 dark:border-neutral-800;
 }
