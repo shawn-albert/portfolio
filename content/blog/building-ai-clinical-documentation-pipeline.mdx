@@ -13,8 +13,6 @@ tags:
   - AWS Serverless
 ---
 
-import mermaid from '@components/mermaid';
-
 # Agentic AI Clinical Documentation Pipeline
 
 I built a serverless pipeline that transforms clinical conversations into clinical documentation using AWS's AI services, with a focus on creating queryable, analytics-ready data in Apache Iceberg format.
@@ -30,19 +28,7 @@ Care managers record conversations that need to be converted into formal SOAP no
 
 ## Architecture
 
-<mermaid chart={`
-flowchart LR
-    A[Audio File in S3] --> B1[AWS Transcribe Medical]
-    A --> B2[Start HealthScribe Job]
-    B1 --> C[Transcription Job]
-    B2 --> J[HealthScribe Job Processing]
-    C --> D[Transcription JSON in S3]
-    J --> K[Summary JSON in S3]
-    D --> E[Process Transcription]
-    E --> F[Generate SOAP Note]
-    F --> G[Extract Medical Codes]
-    G --> H[Store in Apache Iceberg]
-`} />
+![AI Clinical Documentation Pipeline](/diagrams/ai_clinical_scribe.svg)
 
 ## Core Components
 
@@ -94,7 +80,7 @@ This modular design allows for:
 
 ### 3. Data Storage with Apache Iceberg
 
-The most interesting part is how the data is structured for analysis. The finalize_output Lambda converts complex clinical data into queryable Iceberg tables using the AWS SDK for pandas (awswrangler), a library that integrates pandas functionality to AWS services. The library is easily added via a [Lambda layer](https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html).
+A final Lambda function converts complex clinical data into queryable Iceberg tables using the AWS SDK for pandas (awswrangler), a library that integrates pandas functionality to AWS services. The library is easily added via a [Lambda layer](https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html).
 
 ```python
 def write_to_iceberg(record: Dict[str, Any], bucket: str, database: str, table: str):
@@ -146,7 +132,7 @@ FROM clinical_data.soap_notes
 WHERE processed_at > CURRENT_DATE - INTERVAL '30' DAY;
 ```
 
-This setup enables downstream analytics while maintaining the original document structure. The Iceberg format also provides ACID transactions and time travel capabilities, crucial for healthcare data management.
+This setup enables downstream analytics while maintaining the original document structure. The Iceberg format also provides ACID transactions and time travel capabilities, facilitating data governance.
 
 ## Future Work
 
