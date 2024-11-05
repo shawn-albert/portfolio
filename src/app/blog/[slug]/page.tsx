@@ -11,11 +11,22 @@ import { metadata as meta } from '@/app/config';
 import { MDXLink, headingTypes, Heading } from '@/lib/mdx/default-components';
 import { cn } from '@/lib/utils';
 import { HTMLAttributes } from 'react';
+import fs from 'fs/promises';
+import path from 'path';
 
 interface BlogPageProps {
   params: {
     slug: string;
   };
+}
+
+async function getSvgContent(src: string): Promise<string | null> {
+  try {
+    const svgPath = path.join(process.cwd(), 'public', src);
+    return await fs.readFile(svgPath, 'utf8');
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function generateStaticParams() {
@@ -83,7 +94,22 @@ export default async function BlogPage({ params }: BlogPageProps) {
               code={body}
               components={{
                 a: MDXLink,
-                img: (props) => <img className="rounded-xl" {...props} />,
+                img: async (props) => {
+                  if (props.src?.endsWith('.svg')) {
+                    const svgContent = await getSvgContent(props.src);
+                    if (!svgContent) return <img className="rounded-xl" {...props} />;
+
+                    return (
+                      <div className="w-full my-8">
+                        <div
+                          className="w-full [&>svg]:w-full [&>svg]:h-auto dark:invert-0"
+                          dangerouslySetInnerHTML={{ __html: svgContent }}
+                        />
+                      </div>
+                    );
+                  }
+                  return <img className="rounded-xl" {...props} />;
+                },
                 ...Object.fromEntries(
                   headingTypes.map((type) => [
                     type,
@@ -107,7 +133,5 @@ export default async function BlogPage({ params }: BlogPageProps) {
         </article>
       </div>
     </main>
-
-
   );
 }
