@@ -137,51 +137,53 @@ export default async function ProjectPage({ params }: ProjectPageProps): Promise
   };
 
   return (
-    <main className="flex-1 mt-24">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <article className="prose prose-slate mx-auto max-w-4xl dark:prose-invert lg:prose-lg">
-        <div className="space-y-4 py-12">
-          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-            {page.data.title}
-          </h1>
-          {page.data.description && (
-            <p className="text-xl text-muted-foreground">
-              {page.data.description}
-            </p>
-          )}
-          {formattedDate && (
-            <time className="text-sm text-muted-foreground">
-              {formattedDate}
-            </time>
-          )}
-          {page.data.tags && page.data.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {page.data.tags.map((tag, index) => (
-                <span
-                  key={`tag_${index}`}
-                  className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
-                >
-                  {tag.label}
-                </span>
-              ))}
+    <main className="flex-1 mt-24 px-4">
+      <div className="container">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <article className="prose prose-slate mx-auto max-w-4xl dark:prose-invert lg:prose-lg">
+          <div className="space-y-4 py-12">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+              {page.data.title}
+            </h1>
+            {page.data.description && (
+              <p className="text-xl text-muted-foreground">
+                {page.data.description}
+              </p>
+            )}
+            {formattedDate && (
+              <time className="text-sm text-muted-foreground">
+                {formattedDate}
+              </time>
+            )}
+            {page.data.tags && page.data.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {page.data.tags.map((tag, index) => (
+                  <span
+                    key={`tag_${index}`}
+                    className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground"
+                  >
+                    {tag.label}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          {svgDiagram && (
+            <div className="w-full my-8">
+              <div
+                className="w-full [&>svg]:w-full [&>svg]:h-auto"
+                dangerouslySetInnerHTML={{ __html: svgDiagram }}
+              />
             </div>
           )}
-        </div>
-        {svgDiagram && (
-          <div className="w-full my-8">
-            <div
-              className="w-full [&>svg]:w-full [&>svg]:h-auto"
-              dangerouslySetInnerHTML={{ __html: svgDiagram }}
-            />
+          <div className="py-6">
+            <MDXRemote source={page.data.content} components={mdxComponents} />
           </div>
-        )}
-        <div className="py-6">
-          <MDXRemote source={page.data.content} components={mdxComponents} />
-        </div>
-      </article>
+        </article>
+      </div>
     </main>
   );
 }
