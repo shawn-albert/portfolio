@@ -57,7 +57,7 @@ export default function About() {
         <div className="flex flex-col items-center md:max-w-7xl">
           <h1 className="leading-wide tracking-relaxed text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl">
             <TextReveal delay={0.1}>
-              A tech innovator who loves to build
+              A data guy who loves to build
             </TextReveal>
           </h1>
           <Line className="mt-16" />
@@ -93,12 +93,12 @@ export default function About() {
                     </p>
                     <p className="text-zinc-700 dark:text-zinc-400">
                       <TextReveal>
-                        At Belle, I architected agentic AI workflows using Amazon Bedrock, creating systems that automatically transform patient interactions into clinical documentation. This innovation helped healthcare providers spend more time with patients and less time on paperwork. The platform processed data from over 250,000 patient visits and 2.2 million clinical images, delivering cost savings of $800-1500 per Medicare Advantage member.
+                        At Belle, I architected agentic AI workflows using Amazon Bedrock, creating systems that automatically transform patient interactions into clinical documentation. This innovation helped healthcare providers spend more time with patients and less time on paperwork. Additionally, with the use of natural language processing (NLP), medical entities were extracted from the clinical notes as features for predictive modeling.
                       </TextReveal>
                     </p>
                     <p className="text-zinc-700 dark:text-zinc-400">
                       <TextReveal>
-                        My work extends beyond just implementing AI – I am passionate about building foundations that enable scalable innovation. I have engineered modern data platforms with an Apache Iceberg lakehouse architecture, dbt-Athena for data processing, and comprehensive data governance with LakeFormation. To ensure reliability at scale, I built automated CI/CD pipelines with GitHub Actions, implementing infrastructure as code through Terraform and AWS CDK for consistent deployments from development to production.
+                        Building scalable foundations for AI innovation is at the core of my work. At Belle, I engineered a modern data platform leveraging an Apache Iceberg lakehouse architecture, dbt-Athena processing pipelines, and LakeFormation governance. To enable rapid and reliable deployments, I built automated CI/CD workflows with GitHub Actions, while managing cloud infrastructure through Terraform and AWS CDK.
                       </TextReveal>
                     </p>
                     <p className="text-zinc-700 dark:text-zinc-400">
@@ -119,6 +119,27 @@ export default function About() {
           </div>
         </div>
       </MotionWrap>
-    </main>
+      <MotionWrap className="w-full py-24 lg:py-32" id="education">
+        <div className="px-4 md:px-6">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl/none">
+                <TextReveal>Education</TextReveal>
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400">
+                <TextReveal>
+                  My academic journey combining technical expertise with business acumen.
+                </TextReveal>
+              </p>
+            </div>
+            <div className="grid gap-4">
+              {education.map((edu, index) => (
+                <EducationCard key={`education_${index}`} {...edu} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </MotionWrap>
+    </main >
   );
 }
