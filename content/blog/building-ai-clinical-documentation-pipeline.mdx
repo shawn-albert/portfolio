@@ -71,14 +71,218 @@ def create_generate_soap_note_task(self) -> sfn.Chain:
         )
         section_generators.append(generate_section)
 ```
+### 3. Medical Entity Extraction
 
-This modular design allows for:
-- Section-specific model optimization
-- Independent quality monitoring
-- Parallel processing
-- Future incorporation of specialized medical models
+#### Processing the Medical Text 
 
-### 3. Data Storage with Apache Iceberg
+First, we need to break our text into manageable chunks since AWS Comprehend Medical has a 5000-character limit:
+
+```python
+def process_medical_text(text: str) -> List[str]:
+    # AWS Comprehend Medical has a 5000-character limit
+    MAX_CHUNK_SIZE = 5000
+    return [text[i:i+MAX_CHUNK_SIZE] for i in range(0, len(text), MAX_CHUNK_SIZE)]
+```
+
+#### Three Types of Detection
+
+##### 1. General Medical Entity Detection
+Our first pass identifies medical terminology and concepts. This includes things like conditions, medications, and anatomical references:
+
+```python
+def detect_medical_entities(text: str) -> List[Dict[str, Any]]:
+    response = comprehend_medical.detect_entities_v2(Text=text)
+    
+    # We only keep entities with high confidence scores
+    return [
+        entity for entity in response["Entities"]
+        if entity["Score"] >= 0.8  # 80% confidence threshold
+    ]
+```
+
+This gives us results like:
+```python
+{
+    "Text": "blood pressure",
+    "Category": "TEST_TREATMENT_PROCEDURE",
+    "Type": "TEST_NAME",
+    "Score": 0.97,
+    "Traits": [
+        {"Name": "VITAL_SIGN", "Score": 0.92}
+    ]
+}
+```
+
+##### 2. ICD-10 Code Detection
+Next, we look specifically for diagnoses that map to ICD-10 codes:
+
+```python
+def extract_icd10_codes(text: str) -> List[Dict[str, Any]]:
+    response = comprehend_medical.infer_icd10_cm(Text=text)
+    
+    # Extract both the diagnosis and its ICD-10 code
+    codes = []
+    for entity in response["Entities"]:
+        if entity["Score"] >= 0.8:
+            codes.append({
+                "Text": entity["Text"],  # e.g., "type 2 diabetes"
+                "ICD10": entity["ICD10CMConcepts"][0]["Code"],  # e.g., "E11.9"
+                "Score": entity["Score"]
+            })
+    return codes
+```
+
+##### 3. Medication Code Detection
+Finally, we extract medication information and map it to RxNorm codes:
+
+```python
+def extract_medications(text: str) -> List[Dict[str, Any]]:
+    response = comprehend_medical.infer_rx_norm(Text=text)
+    
+    medications = []
+    for med in response["Entities"]:
+        if med["Score"] >= 0.8:
+            medications.append({
+                "Text": med["Text"],  # e.g., "metformin 500mg"
+                "RxNorm": med["RxNormConcepts"][0]["Code"],  # e.g., "203563"
+                "Attributes": {  # Extra info like dosage, frequency
+                    attr["Type"]: attr["Text"]
+                    for attr in med.get("Attributes", [])
+                    if attr["Score"] >= 0.8
+                }
+            })
+    return medications
+```
+
+#### Handling the SOAP Note Sections
+
+We process each section of the SOAP note through all three detectors:
+
+```python
+def process_soap_sections(soap_note: Dict[str, str]) -> Dict[str, Dict[str, List]]:
+    processed_sections = {}
+    
+    for section_name, text in soap_note.items():
+        section_results = {
+            "entities": [],
+            "diagnoses": [],
+            "medications": []
+        }
+        
+        # Process each chunk of the section text
+        for chunk in process_medical_text(text):
+            # Run all three detectors
+            section_results["entities"].extend(detect_medical_entities(chunk))
+            section_results["diagnoses"].extend(extract_icd10_codes(chunk))
+            section_results["medications"].extend(extract_medications(chunk))
+            
+        processed_sections[section_name] = section_results
+        
+    return processed_sections
+```
+
+#### Deduplication and Confidence Filtering
+
+Before finalizing our results, we remove duplicates while keeping the highest confidence scores:
+
+```python
+def deduplicate_entities(entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    unique_entities = {}
+    
+    for entity in entities:
+        entity_key = (entity["Text"].lower(), entity.get("Category", "UNKNOWN"))
+        
+        if (entity_key not in unique_entities or 
+            entity["Score"] > unique_entities[entity_key]["Score"]):
+            unique_entities[entity_key] = entity
+            
+    return list(unique_entities.values())
+```
+
+#### Example Output
+
+For a SOAP note section like:
+```text
+Patient reports increased blood pressure. Currently taking metformin 500mg twice daily 
+for type 2 diabetes. Complains of occasional chest pain.
+```
+
+We extract structured data like:
+```python
+{
+    "subjective": {
+        "entities": [
+            {"Text": "blood pressure", "Category": "TEST_TREATMENT_PROCEDURE"},
+            {"Text": "chest pain", "Category": "MEDICAL_CONDITION"}
+        ],
+        "diagnoses": [
+            {
+                "Text": "type 2 diabetes",
+                "ICD10": "E11.9",
+                "Score": 0.95
+            }
+        ],
+        "medications": [
+            {
+                "Text": "metformin 500mg twice daily",
+                "RxNorm": "203563",
+                "Attributes": {
+                    "DOSAGE": "500mg",
+                    "FREQUENCY": "twice daily"
+                }
+            }
+        ]
+    }
+}
+```
+
+#### Error Handling
+
+We wrap each API call with error handling to ensure the pipeline continues even if one detection fails:
+
+```python
+def safe_api_call(func: Callable, text: str) -> List[Dict[str, Any]]:
+    try:
+        return func(text)
+    except ClientError as e:
+        logger.error(f"API call failed: {str(e)}")
+        return []  # Return empty list on failure
+```
+
+#### Preparing for Storage
+
+Finally, we format the extracted data for our Iceberg tables:
+
+```python
+def prepare_for_storage(processed_sections: Dict[str, Dict[str, List]]) -> Dict[str, Any]:
+    return {
+        "entities": json.dumps([
+            entity 
+            for section in processed_sections.values() 
+            for entity in section["entities"]
+        ]),
+        "medical_codes": json.dumps({
+            "diagnoses": [
+                dx 
+                for section in processed_sections.values() 
+                for dx in section["diagnoses"]
+            ],
+            "medications": [
+                med 
+                for section in processed_sections.values() 
+                for med in section["medications"]
+            ]
+        })
+    }
+```
+
+This structured data flows into our Iceberg tables, where we can use Athena's JSON functions to analyze:
+- Diagnosis patterns across patient populations
+- Medication prescribing trends
+- Common symptoms and conditions
+- Treatment effectiveness over time
+
+### 4. Data Storage with Apache Iceberg
 
 A final Lambda function converts complex clinical data into queryable Iceberg tables using the AWS SDK for pandas (awswrangler), a library that integrates pandas functionality to AWS services. The library is easily added via a [Lambda layer](https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html).
 
