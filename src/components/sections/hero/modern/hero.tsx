@@ -19,7 +19,7 @@ function Hero() {
         <div className="relative flex h-full flex-col items-center justify-center">
           <div className="flex w-full items-center justify-center px-4 md:px-6">
             <h1 className="text-4xl font-light sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
-              <TextReveal>An engineer</TextReveal>
+              <TextReveal>A data guy</TextReveal>
               <br />
               <span className="flex items-center gap-2 md:gap-4">
                 <Reveal>who</Reveal>
@@ -31,7 +31,7 @@ function Hero() {
                     fill
                   />
                 </motion.span>
-                <Reveal>data</Reveal>
+                <Reveal>to build</Reveal>
               </span>
             </h1>
           </div>
