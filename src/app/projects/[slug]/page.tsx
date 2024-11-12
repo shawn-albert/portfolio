@@ -174,7 +174,7 @@ export default async function ProjectPage({ params }: ProjectPageProps): Promise
           {svgDiagram && (
             <div className="w-full my-8">
               <div
-                className="w-full [&>svg]:w-full [&>svg]:h-auto"
+                className="w-full [&>svg]:w-full [&>svg]:h-auto safari-svg-fix"
                 dangerouslySetInnerHTML={{ __html: svgDiagram }}
               />
             </div>

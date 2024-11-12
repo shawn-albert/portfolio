@@ -102,7 +102,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                     return (
                       <div className="w-full my-8">
                         <div
-                          className="w-full [&>svg]:w-full [&>svg]:h-auto dark:invert-0"
+                          className="w-full [&>svg]:w-full [&>svg]:h-auto safari-svg-fix"
                           dangerouslySetInnerHTML={{ __html: svgContent }}
                         />
                       </div>

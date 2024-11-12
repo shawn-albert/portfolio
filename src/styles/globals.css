@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+
+  _::-webkit-full-page-media,
+  _:future,
+  :root .safari-svg-fix svg {
+    -webkit-filter: none !important;
+    filter: none !important;
+  }
+}
+
+@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+  @supports (-webkit-background-clip: text) {
+    .safari-svg-fix svg {
+      -webkit-filter: none !important;
+      filter: none !important;
+      color-scheme: none !important;
+    }
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
