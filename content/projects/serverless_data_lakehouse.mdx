@@ -1,0 +1,192 @@
+---
+title: Modern Serverless Data Platform
+description: A modern data lakehouse architecture leveraging Apache Iceberg and AWS services to create a scalable, serverless data platform with automated deployment and governance.
+date: 2024-10-18
+tags:
+  - label: Apache Iceberg
+  - label: AWS Lake Formation
+  - label: AWS Glue
+  - label: AWS Athena
+  - label: dbt
+  - label: GitHub Actions
+  - label: Docker
+  - label: AWS ECR
+  - label: AWS ECS
+  - label: Infrastructure as Code (IaC)
+  - label: AWS CDK
+  - label: AWS RDS
+---
+
+<section className="space-y-6">
+
+## Overview
+
+Engineered a modern data platform leveraging Apache Iceberg and AWS services to create a scalable, serverless data lakehouse architecture. The platform implements a Bronze-Silver-Gold data paradigm with automated deployment through GitHub Actions and comprehensive data governance using AWS Lake Formation.
+
+## Architecture Components
+
+1. Data Ingestion Layer
+   - AWS RDS (MySQL and PostgreSQL) as source systems
+   - AWS Glue ETL jobs for data extraction and loading
+   - CloudFormation and CDK for infrastructure deployment
+   
+2. Data Processing Layer
+   - Apache Iceberg for table format management
+   - AWS Lake Formation for data access control
+   - AWS Glue Data Catalog for metadata management
+   - AWS Athena with Spark workgroups for data processing
+   
+3. CI/CD Pipeline
+   - GitHub Actions for automated deployment
+   - Docker for containerization
+   - AWS ECR for container registry
+   - AWS ECS for container orchestration
+   
+4. Data Transformation
+   - dbt for data transformations
+   - SparkSQL for data processing
+   - AWS Fargate for serverless compute
+
+## Technical Implementation
+
+<div className="space-y-2">
+<h3>Data Layer Architecture</h3>
+<p>The platform implements a multi-layer data architecture that aligns with dbt best practices:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data Lake Layer</th>
+      <th>dbt Layer</th>
+      <th>Description</th>
+      <th>Implementation Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Bronze</strong></td>
+      <td><strong>Raw</strong></td>
+      <td>Initial ingestion layer where raw data from source systems is loaded with minimal or no transformation</td>
+      <td>
+        • Raw data loaded from source systems (RDS MySQL/PostgreSQL)<br />
+        • Original schema and data preserved<br />
+        • Insert/overwrite patterns via Glue ETL<br />
+        • Source system metadata capture
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Silver</strong></td>
+      <td><strong>Staging</strong></td>
+      <td>Cleaned and standardized data layer, focused on removing duplicates, standardizing formats, and generally improving data quality</td>
+      <td>
+        • Automated data cleaning pipelines<br />
+        • Duplicate record removal<br />
+        • Format standardization and type casting<br />
+        • Basic data quality validation rules<br />
+        • Schema enforcement
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Silver</strong></td>
+      <td><strong>Intermediate</strong></td>
+      <td>Layer that holds enriched data and additional transformations to create relationships between entities, often used for further downstream aggregations</td>
+      <td>
+        • Entity relationship mapping and joins<br />
+        • Data enrichment transformations<br />
+        • Preparation for aggregation layers<br />
+        • Complex business logic implementation<br />
+        • Derived field calculations
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Gold</strong></td>
+      <td><strong>Facts</strong></td>
+      <td>Highly curated layer representing analytics-ready data in a fact table format, typically containing metrics or aggregations for specific use cases</td>
+      <td>
+        • Core metric calculations and aggregations<br />
+        • Fact table generation and modeling<br />
+        • Performance-optimized table structures<br />
+        • Incremental processing logic<br />
+        • Data validation rules
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Gold</strong></td>
+      <td><strong>Marts</strong></td>
+      <td>Final layer, designed for specific business domains and reporting, tailored to business requirements or specific use cases</td>
+      <td>
+        • Domain-specific data models<br />
+        • Reporting-ready dimensional tables<br />
+        • Business logic implementation<br />
+        • Self-service analytics views<br />
+        • Documentation and data dictionaries
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Automation and Deployment
+- GitHub Actions workflow for CI/CD
+  - Automated testing and validation
+  - Infrastructure as Code deployment
+  - Docker image building and pushing
+  
+- AWS Cloud Development Kit (CDK) for infrastructure
+  - Infrastructure-as-code-based resource provisioning
+  - Environment consistency
+  - Version-controlled infrastructure
+
+### Data Governance
+- AWS Lake Formation integration
+  - Fine-grained access controls
+  - Column-level security
+  - Data discovery and cataloging
+  
+- Metadata Management
+  - Glue Data Catalog integration
+  - Automated schema evolution
+  - Data lineage tracking
+</div>
+
+## Key Features
+
+<div className="space-y-2">
+- Serverless Architecture
+  - Pay-per-use compute resources
+  - Automatic scaling
+  - Minimal operational overhead
+
+- Data Quality and Governance
+  - Automated data validation
+  - Access control and auditing
+  - Data lineage tracking
+
+- Performance Optimization
+  - Query optimization with Apache Iceberg
+  - Partition management
+  - Compute resource optimization
+
+- Development Experience
+  - Local development environment
+  - Automated deployment pipeline
+  - Comprehensive documentation
+</div>
+
+## Impact
+
+The modern data platform provides a robust foundation for data operations through:
+- Automated data pipeline orchestration
+- Standardized data modeling practices
+- Efficient query performance through optimized table structures
+- Reduced operational overhead via serverless architecture
+- Scalable infrastructure supporting analytics workloads
+
+## Technical Outcomes
+
+- Implemented end-to-end data pipeline automation aligned with dbt best practices
+- Established data quality frameworks across transformation layers
+- Created maintainable and version-controlled data transformations
+- Built modular infrastructure supporting iterative development
+- Enabled self-service analytics through well-structured data marts
+
+</section>
