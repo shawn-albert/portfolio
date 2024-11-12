@@ -1,9 +1,10 @@
 ---
 title: Modern Serverless Data Platform
 description: A modern data lakehouse architecture leveraging Apache Iceberg and AWS services to create a scalable, serverless data platform with automated deployment and governance.
-date: 2024-10-18
+date: 2024-09-01
 tags:
   - label: Apache Iceberg
+  - label: Data Lakehouse
   - label: AWS Lake Formation
   - label: AWS Glue
   - label: AWS Athena
@@ -111,44 +112,28 @@ Engineered a modern data platform leveraging Apache Iceberg and AWS services to 
       </td>
     </tr>
     <tr>
-      <td><strong>Gold</strong></td>
-      <td><strong>Marts</strong></td>
-      <td>Final layer, designed for specific business domains and reporting, tailored to business requirements or specific use cases</td>
-      <td>
+    <td><strong>Gold</strong></td>
+    <td><strong>Marts</strong></td>
+    <td>Final layer, designed for specific business domains and reporting, tailored to business requirements or specific use cases</td>
+    <td>
         • Domain-specific data models<br />
         • Reporting-ready dimensional tables<br />
         • Business logic implementation<br />
         • Self-service analytics views<br />
         • Documentation and data dictionaries
-      </td>
-    </tr>
-  </tbody>
+  </td>
+</tr>
+<tr>
+  <td colSpan="4" style={{ borderTop: '1px solid #ccc' }}></td>
+</tr>
+</tbody>
 </table>
 
-### Automation and Deployment
-- GitHub Actions workflow for CI/CD
-  - Automated testing and validation
-  - Infrastructure as Code deployment
-  - Docker image building and pushing
-  
-- AWS Cloud Development Kit (CDK) for infrastructure
-  - Infrastructure-as-code-based resource provisioning
-  - Environment consistency
-  - Version-controlled infrastructure
-
-### Data Governance
-- AWS Lake Formation integration
-  - Fine-grained access controls
-  - Column-level security
-  - Data discovery and cataloging
-  
-- Metadata Management
-  - Glue Data Catalog integration
-  - Automated schema evolution
-  - Data lineage tracking
 </div>
 
 ## Key Features
+
+The modern data platform provides a robust foundation for data operations through:
 
 <div className="space-y-2">
 - Serverless Architecture
@@ -157,29 +142,26 @@ Engineered a modern data platform leveraging Apache Iceberg and AWS services to 
   - Minimal operational overhead
 
 - Data Quality and Governance
-  - Automated data validation
-  - Access control and auditing
-  - Data lineage tracking
+  - Automated data validation with dbt tests
+  - Fine-grained access controls and column-level security
+  - Data discovery and cataloging
+  - Automated schema evolution
 
 - Performance Optimization
   - Query optimization with Apache Iceberg
   - Partition management
   - Compute resource optimization
 
-- Development Experience
-  - Local development environment
-  - Automated deployment pipeline
-  - Comprehensive documentation
+- Automated Deployments
+  - GitHub Actions for CI/CD with automated testing, validation, and Docker image deployment
+  - AWS CDK for Infrastructure as Code, ensuring consistent, version-controlled infrastructure
+  - Environment provisioning with automated resource management
+
+- Increased Development Efficiency
+  - Standardized data models across projects
+  - DataOps-driven CI/CD pipeline
+  - Auto-generated documentation via dbt models
 </div>
-
-## Impact
-
-The modern data platform provides a robust foundation for data operations through:
-- Automated data pipeline orchestration
-- Standardized data modeling practices
-- Efficient query performance through optimized table structures
-- Reduced operational overhead via serverless architecture
-- Scalable infrastructure supporting analytics workloads
 
 ## Technical Outcomes
 
@@ -187,6 +169,5 @@ The modern data platform provides a robust foundation for data operations throug
 - Established data quality frameworks across transformation layers
 - Created maintainable and version-controlled data transformations
 - Built modular infrastructure supporting iterative development
-- Enabled self-service analytics through well-structured data marts
 
 </section>
