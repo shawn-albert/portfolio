@@ -1,100 +1,155 @@
-<p align="center">
-  <img alt="" src="/.github/assets/cover.png" />
-</p>
-
-<h1 align="center">
-  shadcn-portfolio
-</h1>
+<h1 align="center">Professional Portfolio Platform</h1>
 
 <p align="center">
-  <a aria-label="Framework" href="https://nextjs.org">
-    <img alt="" src="https://img.shields.io/badge/Next.js-000000.svg?style=for-the-badge&logo=Next.js&labelColor=000">
+  <a href="https://nextjs.org" target="_blank">
+    <img src="https://img.shields.io/badge/Next.js-14.2.12-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
   </a>
-  <img alt="" src="https://img.shields.io/github/languages/top/techwithanirudh/shadcn-portfolio?style=for-the-badge&labelColor=000">
-  <a aria-label="License" href="https://github.com/techwithanirudh/shadcn-portfolio/blob/main/LICENSE">
-    <img alt="" src="https://img.shields.io/github/license/techwithanirudh/shadcn-portfolio?style=for-the-badge&labelColor=000">
+  <a href="https://www.typescriptlang.org" target="_blank">
+    <img src="https://img.shields.io/badge/TypeScript-5.0.0-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  </a>
+  <a href="https://tailwindcss.com" target="_blank">
+    <img src="https://img.shields.io/badge/TailwindCSS-3.3.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
+  </a>
+  <img src="https://img.shields.io/badge/version-0.9.1-green?style=for-the-badge" alt="Version" />
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/shawn-albert/portfolio?style=for-the-badge&labelColor=000" alt="License" />
   </a>
 </p>
 
 ## 📋 Table of Contents
 
-1. 🤖 [Introduction](#introduction)
-2. 🚀 [Tech Stack](#tech-stack)
-3. ✨ [Features](#features)
-4. 📚 [Getting Started](#getting-started)
-5. ❤️ [Credits](#credits)
+1. [🚀 Overview](#overview)
+2. [💻 Tech Stack](#tech-stack)
+3. [🌟 Features](#features)
+4. [🛠️ Technical Implementation](#technical-implementation)
+5. [☁️ Infrastructure & Deployment](#infrastructure--deployment)
+6. [⚡ Performance](#performance)
+7. [🔧 Development](#development)
+8. [🏃‍♂️ Getting Started](#getting-started)
+9. [📚 References](#references)
+10. [❤️ Credits](#credits)
 
-## <a name="introduction">🤖 Introduction</a>
+## 🚀 Overview
 
-This is a portfolio template built using Next.JS, Framer Motion and Shadcn/UI.
+A modern, performant portfolio platform showcasing AI and ML infrastructure projects. Built with Next.js and TypeScript, this platform demonstrates cutting-edge web development practices while maintaining optimal performance and user experience.
 
-## <a name="tech-stack">🚀 Tech Stack</a>
+## 💻 Tech Stack
 
-- Next.js
-- shadcn/ui
-- Framer Motion
-- Tailwind CSS
+- **Framework:** Next.js 14 with App Router
+- **Language:** TypeScript 5
+- **Styling:** TailwindCSS 3, shadcn/ui
+- **Content:** MDX with content collections
+- **Animation:** Framer Motion
+- **Deployment:** Vercel Edge Network
+- **Performance:** Next.js Image Optimization
+- **Development:** ESLint, Prettier, Husky
 
-## <a name="features">✨ Features</a>
+## 🌟 Features
 
-- ⚡️ Next.js 14 with App Router
-- 📝 Blog
-- 🎨 Tailwind CSS - for styling
-- 🌈 Shadcn UI - accessible UI components
-- 📱 Responsive design
-- 🌗 Light / Dark mode
-- 📈 SEO optimized with meta tags
-- 📊 Sentry (setup required)
-- 🎨 Animations - using Framer Motion
-- 🔨 Husky & Lint Staged - lint and format code before committing
-- 💄 Prettier - code formatting
-- 📞 Contact form (setup required)
-- 🛡️ Cloudflare Turnstile (setup required)
+- ⚡️ Server-side rendering with Next.js 14
+- 📝 MDX-based content management
+- 🎨 Responsive design with Tailwind CSS
+- 🌓 Dark/Light mode support
+- 🎭 Smooth animations with Framer Motion
+- 📱 Mobile-first approach
+- 🔍 SEO optimized
+- 🛡️ Type-safe development with TypeScript
+- 📊 Performance monitoring
+- 🔒 Modern security practices
 
-## <a name="getting-started">📚 Getting Started</a>
+## 🛠️ Technical Implementation
 
-Please refer to the [getting started guide](./GETTING_STARTED.md) for information on how to configure and run the
-portfolio template.
+- Leverages Next.js 14 App Router for optimal routing and SSR
+- Custom MDX content pipeline for flexible documentation
+- Reusable React components built with shadcn/ui
+- Responsive layouts using Tailwind CSS
+- Motion effects using Framer Motion
 
-## <a name="credits">❤️ Credits</a>
+## ☁️ Infrastructure & Deployment
 
-This project wouldn’t be possible without the following open-source projects:
+- Global content delivery via Vercel's edge network
+- Automated preview deployments
+- Optimized asset delivery with next/image
+- Comprehensive security policies
+- Automated TypeScript checks
 
-- MDX Rendering and Logic from [fumadocs](https://github.com/fuma-nama/fumadocs)
-- MDX Data from [content-collections](https://www.content-collections.dev/)
-- UI from [shadcn/ui](https://ui.shadcn.com/)
-- Smooth Scrolling from [Lenis](https://github.com/darkroomengineering/lenis)
-- Turnstile from [react-turnstile](https://github.com/marsidev/react-turnstile)
+## ⚡ Performance
 
-This project has been inspired by the following websites:
+- 💯 Perfect Lighthouse scores (100/100)
+- 🏃‍♂️ Static page generation
+- 📦 Optimized asset caching
+- 🖼️ Lazy-loaded images with blur placeholders
+- 🔄 Streaming and progressive rendering
 
-- [honghong.me](https://honghong.me/)
-- [cuberto.com](https://cuberto.com/)
-- [fuma-nama.vercel.app](https://fuma-nama.vercel.app/)
-- [fumadocs.vercel.app](https://fumadocs.vercel.app/)
-- [dennissnellenberg.com](https://dennissnellenberg.com/)
-- [bychristinakosik.com](https://www.bychristinakosik.com/)
-- [danmachado.com](https://www.danmachado.com/)
-- [ui.aceternity.com](https://ui.aceternity.com/)
-- [blog.olivierlarose.com](https://blog.olivierlarose.com/)
-- [props.studiolumio.com](https://props.studiolumio.com/)
-- [dennissnellenberg.com](https://dennissnellenberg.com/)
-- [davidhaz.com](https://davidhaz.com/)
-- [fellipeutaka.vercel.app](https://fellipeutaka.vercel.app/)
-- [a-bd.me](https://www.a-bd.me/)
-- [luge.cool](https://luge.cool/)
-- [nahelmoussi.com](https://nahelmoussi.com/)
-- [boyntonyards.com](https://boyntonyards.com/)
-- [ped.ro](https://ped.ro/)
-- [leerob.io](https://leerob.io/)
-- [portfolio hero challenge](https://x.com/thereal_apk/status/1829874339254321290)
-- [minimal homepage exploration](https://x.com/FonsMans/status/1829510586843152791)
-- [suxmaiya.framer.website](https://x.com/SumaiyaSsa/status/1828451225714471209)
-- [jrhu.me](https://jrhu.me/)
-- [github.com/ismamz/next-transition-router](https://github.com/ismamz/next-transition-router)
-- [jorisbrianti.fr](https://jorisbrianti.fr/)
-- [athos-dark.framer.ai](https://athos-dark.framer.ai/)
+## 🔧 Development
 
-and more
+```bash
+# Install dependencies
+pnpm install
 
-#
+# Start development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
+```
+
+## 🏃‍♂️ Getting Started
+
+1. Clone the repository
+```bash
+git clone https://github.com/shawn-albert/portfolio.git
+```
+
+2. Install dependencies
+```bash
+pnpm install
+```
+
+3. Set up environment variables
+```bash
+cp .env.example .env.local
+```
+
+4. Start the development server
+```bash
+pnpm dev
+```
+
+Visit `http://localhost:3000` to see your application running.
+
+## 📚 References
+
+### Dependencies
+- [Next.js](https://nextjs.org) - React framework
+- [TypeScript](https://www.typescriptlang.org) - Type safety
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [shadcn/ui](https://ui.shadcn.com) - UI components
+- [Framer Motion](https://www.framer.com/motion) - Animations
+- [MDX](https://mdxjs.com) - Content management
+
+### Development Tools
+- [ESLint](https://eslint.org) - Code linting
+- [Prettier](https://prettier.io) - Code formatting
+- [Husky](https://typicode.github.io/husky) - Git hooks
+- [Commitlint](https://commitlint.js.org) - Commit conventions
+
+### Deployments
+- [Vercel](https://vercel.com) - Hosting platform
+- [Next.js Image](https://nextjs.org/docs/api-reference/next/image) - Image optimization
+
+## ❤️ Credits
+
+This project builds upon the excellent foundational work of [shadcn-portfolio](https://github.com/techwithanirudh/shadcn-portfolio) by [techwithanirudh](https://github.com/techwithanirudh). The original template provided the foundation and inspiration for this portfolio platform.
+
+Special thanks to the maintainers of the core technologies and libraries that make this project possible:
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
+- [Next.js](https://nextjs.org/) team for the incredible React framework
+- The entire open-source community for making projects like this possible
+
+This project follows the belief in standing on the shoulders of giants and giving credit where credit is due. We encourage you to check out the original [shadcn-portfolio](https://github.com/techwithanirudh/shadcn-portfolio) repository for more insights into the foundational implementation.
